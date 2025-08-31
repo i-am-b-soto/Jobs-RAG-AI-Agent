@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  db:
+    image: ankane/pgvector:latest   # Postgres with pgvector preinstalled
+    container_name: vector_db
+    restart: always
+    environment:
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ragpass
+      POSTGRES_DB: ragdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgresql_script.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+volumes:
+  postgres_data:

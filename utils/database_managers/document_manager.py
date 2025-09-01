@@ -1,9 +1,8 @@
-from database_manager import DatabaseManager
-from openai_client import openai_client
+from utils.database_managers.database_manager import DatabaseManager
+from utils.openai_client import openai_client
 
 
 class DocumentManager(DatabaseManager):
-    def __init__(self):
         
     async def fetch_relevant_chunks(self, question: str, top_k: int = 5):
         """Embed the question and run similarity search on chunks."""

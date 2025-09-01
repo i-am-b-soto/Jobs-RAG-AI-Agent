@@ -3,23 +3,23 @@ version: "3.9"
 services:
   db:
     image: ankane/pgvector:latest
-    container_name: job_rag_db
+    container_name: db
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-jobs}
+      POSTGRES_DB: vector_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
 
-  fastapi:
+  api:
     build:
       context: .
-      dockerfile: Dockerfile.fastapi
-    container_name: job_rag_api
+      dockerfile: api/Dockerfile.api
+    container_name: api
     restart: always
     depends_on:
       - db
@@ -28,14 +28,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./fastapi:/code/fastapi
+      - ./api:/code/api
       - ./utils:/code/utils
 
   job_ingestor:
     build:
       context: .
-      dockerfile: Dockerfile.ingestor
-    container_name: job_rag_ingestor
+      dockerfile: job_ingestor/Dockerfile.ingestor
+    container_name: ingestor
     depends_on:
       - db
     env_file:

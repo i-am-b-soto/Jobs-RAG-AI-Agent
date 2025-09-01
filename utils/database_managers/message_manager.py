@@ -1,6 +1,6 @@
 
 import datetime
-from database_manager import DatabaseManager
+from utils.database_managers.database_manager import DatabaseManager
 
 
 class MessageManager(DatabaseManager):
@@ -41,9 +41,9 @@ class MessageManager(DatabaseManager):
         pool = await self.get_pool()
         async with pool.acquire() as conn:
             rows = await conn.fetch("""
-                SELECT position, description 
+                SELECT title, description 
                 FROM documents
-                WHERE position ILIKE $1
+                WHERE title ILIKE $1
             """, f"%{job_title}%")
         return rows
 

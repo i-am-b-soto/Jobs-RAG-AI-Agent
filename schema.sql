@@ -6,20 +6,22 @@ CREATE EXTENSION IF NOT EXISTS vector;
 -- =========================
 
 CREATE TABLE IF NOT EXISTS documents (
-  id UUID PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
+  external_id TEXT,
   source TEXT,                 -- e.g., 'remoteok'
   doc_type TEXT,               -- e.g., 'job_post'
   company TEXT,
   title TEXT,
   url TEXT,
+  description TEXT,
   published_at TIMESTAMPTZ,
   ingested_at TIMESTAMPTZ DEFAULT now(),
   metadata JSONB               -- tags, location, salary, apply_url, etc.
 );
 
 CREATE TABLE IF NOT EXISTS chunks (
-  id UUID PRIMARY KEY,
-  document_id UUID REFERENCES documents(id) ON DELETE CASCADE,
+  id BIGSERIAL PRIMARY KEY,
+  document_id BIGINT REFERENCES documents(id) ON DELETE CASCADE,
   chunk_index INT,
   content TEXT,
   embedding VECTOR(3072),      -- must match your embedding model dimension
@@ -32,8 +34,8 @@ ALTER TABLE chunks
   GENERATED ALWAYS AS (to_tsvector('english', coalesce(content, ''))) STORED;
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS chunks_embedding_ivfflat
-  ON chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+--CREATE INDEX IF NOT EXISTS chunks_embedding_ivfflat
+--  ON chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
 
 CREATE INDEX IF NOT EXISTS chunks_metadata_gin
   ON chunks USING GIN (metadata);
@@ -46,14 +48,14 @@ CREATE INDEX IF NOT EXISTS chunks_content_tsv_gin
 -- =========================
 
 CREATE TABLE IF NOT EXISTS conversations (
-  id UUID PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   user_id TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS messages (
-  id UUID PRIMARY KEY,
-  conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+  id BIGSERIAL PRIMARY KEY,
+  conversation_id BIGINT REFERENCES conversations(id) ON DELETE CASCADE,
   sender TEXT CHECK (sender IN ('user','assistant','system')),
   content TEXT,
   embedding VECTOR(3072),      -- embed messages for semantic recall
@@ -76,8 +78,8 @@ CREATE INDEX IF NOT EXISTS messages_content_tsv_gin
 -- =========================
 
 CREATE TABLE IF NOT EXISTS citations (
-  id UUID PRIMARY KEY,
-  message_id UUID REFERENCES messages(id) ON DELETE CASCADE,
-  chunk_id UUID REFERENCES chunks(id) ON DELETE CASCADE,
+  id BIGSERIAL PRIMARY KEY,
+  message_id BIGINT REFERENCES messages(id) ON DELETE CASCADE,
+  chunk_id BIGINT REFERENCES chunks(id) ON DELETE CASCADE,
   relevance FLOAT
 );

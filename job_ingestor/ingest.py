@@ -4,7 +4,6 @@ import httpx
 import asyncpg
 import json
 
-import uuid
 from openai import OpenAI
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
@@ -59,7 +58,7 @@ async def insert_jobs(pool, jobs):
             # Insert document if not exists, else fetch its ID
             doc_id = await conn.fetchval("""
                 INSERT INTO documents (external_id, company, title, url, description, metadata)
-                SELECT $1, $2, $3, $4, $5
+                SELECT $1, $2, $3, $4, $5, $6
                 WHERE NOT EXISTS (SELECT 1 FROM documents WHERE external_id = $1)
                 RETURNING id
             """, job_id, company, position, url, description, json.dumps({"tags": tags}))

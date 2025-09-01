@@ -19,23 +19,25 @@ async def generate_report(job_title: str = Query(..., description="Job title to 
     job_texts = [r["description"] for r in rows]
     combined_jobs = "\n\n".join(job_texts)
 
+    print(f"len of rows: {len(rows)} job_texts: {len(job_texts)}")
+
     # Ask OpenAI for the report
     prompt = (
         "You are analyzing a database of job postings. "
-        "From the text below, extract the 50 most commonly listed skills and keywords "
+        "From the text below, extract the 25 most commonly listed skills and keywords "
         "along with a count of how many times they appear.\n\n"
         f"{combined_jobs}"
     )
 
     response = openai_client.chat.completions.create(
-        model="gpt-4.1",
+        model="gpt-4.1-mini",
         messages=[
             {"role": "system", "content": "You are an expert labor market analyst."},
             {"role": "user", "content": prompt},
         ],
     )
 
-    report = response.choices[0].message["content"]
+    report = response.choices[0].message
     return {"report": report}
 
 

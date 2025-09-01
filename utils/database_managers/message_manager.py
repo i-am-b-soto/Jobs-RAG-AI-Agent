@@ -39,12 +39,13 @@ class MessageManager(DatabaseManager):
     async def get_jobs_with_position_like(self, job_title):
         """Fetch all jobs with a job title like the following"""
         pool = await self.get_pool()
+        job_title = job_title.strip()
+        print(job_title)
         async with pool.acquire() as conn:
             rows = await conn.fetch("""
-                SELECT title, description 
+                SELECT *
                 FROM documents
-                WHERE title ILIKE $1
-            """, f"%{job_title}%")
+                WHERE title ILIKE $1""", f"%{job_title}%")
         return rows
 
 

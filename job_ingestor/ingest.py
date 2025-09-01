@@ -2,6 +2,7 @@ import os
 import asyncio
 import httpx
 import asyncpg
+
 import uuid
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -11,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 REMOTEOK_API = "https://remoteok.com/api"
-DB_DSN = os.getenv("DB_DSN")
+DB_DSN = os.getenv("DB_DSN") or "postgresql://raguser:ragpass@localhost:5432/vector_db"
 CHUNK_SIZE = 200  # words per chunk
 
 # Initialize OpenAI client
@@ -72,12 +73,12 @@ async def insert_jobs(pool, jobs):
             # Chunk text
             chunks_texts = chunk_text(description)
 
-            # Batch embed chunks
-            response = client.embeddings.create(
+            # Batch embed chunks (OpenAPI call)
+            chunk_response = client.embeddings.create(
                 model="text-embedding-3-large",
                 input=chunks_texts
             )
-            embeddings = [item.embedding for item in response.data]
+            embeddings = [item.embedding for item in chunk_response.data]
 
             # Insert chunks into DB
             for idx, (chunk_text_piece, embedding_vector) in enumerate(zip(chunks_texts, embeddings)):

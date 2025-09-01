@@ -1,2 +1,6 @@
 # RAG-AI-Agent-Jobs
-Creating a custom RAG AI Agent for jobs
+A Custom Python-built RAG AI Agent for jobs
+
+To run: 
+ocker compose up
+docker compose exec job_ingestor python job_ingestor/ingest.py

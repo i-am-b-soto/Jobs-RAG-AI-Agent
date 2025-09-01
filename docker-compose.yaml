@@ -1,18 +1,49 @@
-version: '3.8'
+version: "3.9"
+
 services:
   db:
-    image: ankane/pgvector:latest   # Postgres with pgvector preinstalled
-    container_name: vector_db
+    image: ankane/pgvector:latest
+    container_name: job_rag_db
     restart: always
     environment:
-      POSTGRES_USER: raguser
-      POSTGRES_PASSWORD: ragpass
-      POSTGRES_DB: ragdb
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-jobs}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgresql_script.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: job_rag_api
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/code/app
+      - ./utils:/code/utils
+
+  job_ingestor:
+    build:
+      context: .
+      dockerfile: Dockerfile.ingestor
+    container_name: job_rag_ingestor
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./job_ingestor:/code/job_ingestor
+      - ./utils:/code/utils
+    command: ["sleep", "infinity"] # keeps container running, you exec into it to trigger ingestion
 
 volumes:
   postgres_data:

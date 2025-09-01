@@ -28,7 +28,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/code/app
+      - ./fastapi:/code/fastapi
       - ./utils:/code/utils
 
   job_ingestor:

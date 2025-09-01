@@ -45,7 +45,7 @@ class MessageManager(DatabaseManager):
             rows = await conn.fetch("""
                 SELECT *
                 FROM documents
-                WHERE title ILIKE $1""", f"%{job_title}%")
+                WHERE title ILIKE $1""", f"%'{job_title}'%")
         return rows
 
 

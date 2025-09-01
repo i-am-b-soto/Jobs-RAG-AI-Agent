@@ -71,9 +71,21 @@ async def insert_jobs(pool, jobs):
                 # skip over the rest if document already exists
                 continue
 
+            title_embedding = client.embeddings.create(
+                model="text-embedding-3-large",
+                input=position
+            )
+            try:
+                update_result = await conn.execute("""
+                    UPDATE documents
+                    SET title_embedding = $1,
+                    WHERE id = $2
+                """, "[" + ",".join(str(x) for x in title_embedding) + "]", company, doc_id)
+            except Exception as e:
+                print(f"❌ failure updating {job_id} with vector: {e}")
+
             # Skip empty descriptions
-            if not description.strip():
-                
+            if not description.strip():                
                 continue
 
             # Chunk text

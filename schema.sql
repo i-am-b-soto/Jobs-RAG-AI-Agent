@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS documents (
   doc_type TEXT,               -- e.g., 'job_post'
   company TEXT,
   title TEXT,
+  title_embedding VECTOR(3072),
   url TEXT,
   description TEXT,
   published_at TIMESTAMPTZ,

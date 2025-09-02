@@ -9,11 +9,8 @@ class DocumentManager(DatabaseManager):
     async def fetch_relevant_chunks(self, question: str, top_k: int = 5):
         """Embed the question and run similarity search on chunks."""
         # 1. Embed user question
-        emb_response = await openai_client.embeddings.create(
-            model="text-embedding-3-small",
-            input=question
-        )
-        query_emb = emb_response.data[0].embedding
+        emb_response = openai_client.create_embeddings(question)
+        emb_vector_str = "[" + ",".join(str(x) for x in emb_response) + "]"
 
         # 2. Query pgvector
         conn = await self.get_db_connection()
@@ -25,7 +22,7 @@ class DocumentManager(DatabaseManager):
             ORDER BY c.embedding <-> $1
             LIMIT $2
             """,
-            query_emb, top_k
+            emb_vector_str, top_k
         )
         await conn.close()
         return [r["content"] for r in rows]
@@ -34,10 +31,7 @@ class DocumentManager(DatabaseManager):
         """
             Get all jobs based on job_title
         """
-        query_embedding = openai_client.embeddings.create(
-                model="text-embedding-3-large",
-                input=job_title
-            )
+        query_embedding = openai_client.create_embeddings(job_title)
         query_vector_str = "[" + ",".join(str(x) for x in query_embedding) + "]"
 
         pool = await self.get_pool()

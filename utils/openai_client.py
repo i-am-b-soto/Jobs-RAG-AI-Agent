@@ -21,10 +21,24 @@ class OpenAIClient():
                 model="text-embedding-3-large",
                 input=query
             )
-        user_friendly_response = [x.embedding for x in raw_response.data]
-        if len(user_friendly_response) == 1:
-            user_friendly_response = user_friendly_response[0]
+        user_friendly_response = raw_response.data[0].embedding
         return user_friendly_response
+
+    def create_embeddings_bulk(self, query: str | list):
+        """Create Emebeddings for word or list"""
+        raw_response = self.client.embeddings.create(
+                model="text-embedding-3-large",
+                input=query
+            )
+        user_friendly_response = [x.embedding for x in raw_response.data]
+        return user_friendly_response
+    
+    def generate_chat(self, messages: list[any] ):
+        response = self.client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=messages
+        )
+        return response.choices[0].message.content
 
 
 openai_client = OpenAIClient()

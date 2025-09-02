@@ -14,7 +14,7 @@ async def generate_report(job_title: str = Query(..., description="Job title to 
         Generate the report
     """
 
-    rows = await message_manager.get_jobs_with_position_like(job_title)
+    rows = await document_manager.get_jobs_with_position_like(job_title)
 
     job_texts = [r["description"] for r in rows]
     combined_jobs = "\n\n".join(job_texts)
@@ -29,15 +29,10 @@ async def generate_report(job_title: str = Query(..., description="Job title to 
         f"{combined_jobs}"
     )
 
-    response = openai_client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {"role": "system", "content": "You are an expert labor market analyst."},
-            {"role": "user", "content": prompt},
-        ],
-    )
-
-    report = response.choices[0].message
+    messages = [{"role": "system", "content": "You are an expert labor market analyst."},
+                {"role": "user", "content": prompt}
+                ]
+    report = openai_client.generate_chat(messages) 
     return {"report": report}
 
 

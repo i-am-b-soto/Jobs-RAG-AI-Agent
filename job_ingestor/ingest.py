@@ -63,7 +63,7 @@ async def insert_jobs(jobs):
             if doc_id:
                 inserted_docs += 1
                 if inserted_docs % 5 == 0:
-                    print(f"✅ Added {inserted_docs} to DB")
+                    print(f"✅ Added {inserted_docs} jobs to DB")
             else: # skip over the rest if document already exists
                 print(f"📝 Already have job {job_id} in DB. Skipping.")
                 continue
@@ -84,7 +84,7 @@ async def insert_jobs(jobs):
             chunks_texts = chunk_text(description)
 
             # Create batch embeddings for chunks
-            batch_embeddings = client.create_embeddings(chunks_texts)
+            batch_embeddings = client.create_embeddings_bulk(chunks_texts)
 
             # Insert chunks into DB
             for idx, (chunk_text_piece, embedding_vector) in enumerate(zip(chunks_texts, batch_embeddings)):
@@ -95,11 +95,11 @@ async def insert_jobs(jobs):
                                                         chunk_content=chunk_text_piece, 
                                                         embedding_vector=embedding_vector)
                 except Exception as e:
-                    print(f"❌ failure inserting chunks for {position} - {e}")
+                    print(f"❌ failure inserting chunks for {job_id} - {e}")
                 else:
                     inserted_chunks += 1
                     if inserted_chunks % 5 == 0:
-                        print(f"⚡ Added {len(inserted_chunks)} chunks to db")
+                        print(f"⚡ Added {inserted_chunks} chunks to db")
 
     return inserted_docs, inserted_chunks
 

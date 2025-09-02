@@ -11,7 +11,7 @@ load_dotenv()
 class DatabaseManager:
             
     def __init__(self):
-        self.DB_DSN = os.getenv("DB_DSN")
+        self.DB_DSN = os.getenv("DB_DSN") or "postgresql://postgres:postgres@db:5432/vector_db"
 
     async def get_pool(self):
         # 🔹 Database connection pool

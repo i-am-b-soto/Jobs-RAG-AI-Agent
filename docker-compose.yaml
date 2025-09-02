@@ -40,6 +40,8 @@ services:
       - db
     env_file:
       - .env
+    environment:
+      - PYTHONPATH=/code
     volumes:
       - ./job_ingestor:/code/job_ingestor
       - ./utils:/code/utils

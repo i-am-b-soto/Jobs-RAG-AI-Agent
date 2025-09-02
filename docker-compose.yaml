@@ -47,5 +47,13 @@ services:
       - ./utils:/code/utils
     command: ["sleep", "infinity"] # keeps container running, you exec into it to trigger ingestion
 
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:8080" # localhost:3000 -> nginx inside container
+    depends_on:
+      - api
+
 volumes:
   postgres_data:

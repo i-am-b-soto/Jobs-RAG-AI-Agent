@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, FileText } from "lucide-react";
-
+import ReportPanel from "./ReportPanel";
 
 export default function JobReportForm() {
   const [jobTitle, setJobTitle] = useState("");
@@ -61,7 +61,7 @@ export default function JobReportForm() {
           >
             {loading ? (
               <>
-                <Loader2 className="animate-spin w-8 h-8 text-blue-500" /> Generating...
+                <Loader2 className="spinner" /> Generating...
               </>
             ) : (
               <>
@@ -82,18 +82,7 @@ export default function JobReportForm() {
         )}
 
         {report && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 p-6 bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-xl shadow-sm"
-          >
-            <h2 className="text-lg font-semibold mb-2 text-indigo-700 flex items-center gap-2">
-              <FileText className="h-5 w-5" /> Report
-            </h2>
-            <pre className="report-content">
-              {report}
-            </pre>
-          </motion.div>
+          <ReportPanel report={report} onNewReport={()=> setReport(null)}></ReportPanel>
         )}
       </div>
     </div>

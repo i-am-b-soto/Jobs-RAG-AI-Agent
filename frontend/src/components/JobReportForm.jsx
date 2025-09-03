@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, FileText } from "lucide-react";
 
+
 export default function JobReportForm() {
   const [jobTitle, setJobTitle] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ export default function JobReportForm() {
       });
 
       if (!res.ok) {
+        console.log(res)
         throw new Error(`Server error: ${res.statusText}`);
       }
 
@@ -59,7 +61,7 @@ export default function JobReportForm() {
           >
             {loading ? (
               <>
-                <Loader2 className="animate-spin h-5 w-5" /> Generating...
+                <Loader2 className="animate-spin w-8 h-8 text-blue-500" /> Generating...
               </>
             ) : (
               <>
@@ -88,12 +90,12 @@ export default function JobReportForm() {
             <h2 className="text-lg font-semibold mb-2 text-indigo-700 flex items-center gap-2">
               <FileText className="h-5 w-5" /> Report
             </h2>
-            <pre className="whitespace-pre-wrap text-gray-800 text-sm leading-relaxed">
+            <pre className="report-content">
               {report}
             </pre>
           </motion.div>
         )}
-    </div>
+      </div>
     </div>
   );
 }

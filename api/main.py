@@ -17,7 +17,7 @@ app.add_middleware(
 )
 
 @app.post("/generate-report")
-async def generate_report(job_title: str = Body(..., description="Job title to filter by")):
+async def generate_report(job_title: str = Body(..., embed=True)):
     """
         Generate the report
     """

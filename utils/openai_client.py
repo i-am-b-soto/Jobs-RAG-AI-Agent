@@ -39,9 +39,8 @@ class OpenAIClient():
             messages=messages
         )
         text = response.choices[0].message.content
-        html_text = text.replace("\n", "<br>")
-        html_text = "<div style='white-space: pre-line;'>" + html_text + "</div>"
-        return html_text
+        text = text.replace("\n", "")
+        return text
 
 
 openai_client = OpenAIClient()

@@ -54,3 +54,8 @@ body {
   .container {
     max-width: 400px;
   }
+
+  .report-content {
+    margin: 20px;
+    width: 400px;
+  }

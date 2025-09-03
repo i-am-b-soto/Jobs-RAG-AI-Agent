@@ -1,15 +1,23 @@
 from fastapi import FastAPI
-from fastapi import Query
+from fastapi import Query, Body
 
 from utils.database_managers.document_manager import document_manager
 from utils.database_managers.message_manager import message_manager
 from utils.openai_client import openai_client
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
+# Add CORS middleware to allow everything
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],       # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],       # Allow all HTTP methods
+    allow_headers=["*"],       # Allow all headers
+)
 
-@app.get("/generate-report")
-async def generate_report(job_title: str = Query(..., description="Job title to filter by")):
+@app.post("/generate-report")
+async def generate_report(job_title: str = Body(..., description="Job title to filter by")):
     """
         Generate the report
     """

@@ -23,8 +23,14 @@ wheels/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
+
+
+node_modules/*
+frontend/node_modules/*
+
 *.egg
 MANIFEST
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

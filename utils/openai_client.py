@@ -38,7 +38,10 @@ class OpenAIClient():
             model="gpt-4.1-mini",
             messages=messages
         )
-        return response.choices[0].message.content
+        text = response.choices[0].message.content
+        html_text = text.replace("\n", "<br>")
+        html_text = "<div style='white-space: pre-line;'>" + html_text + "</div>"
+        return html_text
 
 
 openai_client = OpenAIClient()

@@ -116,6 +116,23 @@ body {
   }
 
 
+
+  .ask-button-group { 
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    
+    .ask-input {
+      width: 70%;
+    }
+    
+    .ask-button {
+      width: 20%;
+      height: 49%;
+      background: #51b147;
+    }
+  }
+
   @keyframes spin {
     from {
       transform: rotate(0deg);
@@ -127,8 +144,6 @@ body {
   
   .spinner {
     display: inline-block;
-    width: 2rem;   /* 8 x 0.25rem = 2rem */
-    height: 2rem;
     color: #3b82f6; /* same as Tailwind text-blue-500 */
     animation: spin 1s linear infinite;
   }

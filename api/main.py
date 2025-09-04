@@ -5,6 +5,7 @@ from utils.database_managers.document_manager import document_manager
 from utils.database_managers.message_manager import message_manager
 from utils.openai_client import openai_client
 from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
 # Add CORS middleware to allow everything
@@ -32,7 +33,7 @@ async def generate_report(job_title: str = Body(..., embed=True)):
     # Ask OpenAI for the report
     prompt = (
         "You are analyzing a database of job postings. "
-        "From the text below, extract the 25 most commonly listed skills and keywords "
+        f"The text below contains job information from jobs related to {job_title} that the user is asking about, form this list, extract the 25 most commonly listed skills and keywords "
         "along with a count of how many times they appear.\n\n"
         f"{combined_jobs}"
     )

@@ -39,7 +39,6 @@ class OpenAIClient():
             messages=messages
         )
         text = response.choices[0].message.content
-        text = text.replace("\n", "")
         return text
 
 

@@ -3,7 +3,7 @@ A Custom Python-built RAG AI Agent for jobs
 
 ### To start:
 create a .env file in the JOBS-RAG-AI-AGENT directory add the line:
-- OPENAI_API_KEY=<your-open-api-key>
+- OPENAI_API_KEY=**your-open-api-key**
 
 You will need docker v2 
 -   docker compose up
@@ -11,9 +11,6 @@ You will need docker v2
 
 ### To run the Job Ingestor:
 -   docker compose exec job_ingestor python job_ingestor/ingest.py
-
-###Go to the UI
-localhost:3000
 
 
 ### Go to the UI

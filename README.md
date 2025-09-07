@@ -2,8 +2,10 @@
 A Custom Python-built RAG AI Agent for jobs
 
 ### To start:
-You will need docker v2 
+create a .env file in the JOBS-RAG-AI-AGENT directory add the line:
+- OPENAI_API_KEY=<your-open-api-key>
 
+You will need docker v2 
 -   docker compose up
 
 

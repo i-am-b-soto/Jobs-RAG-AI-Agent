@@ -14,16 +14,21 @@ class MessageManager(DatabaseManager):
         )
         await conn.close()
 
-    async def create_conversation(self, initial_message: str):
-        """Create a new conversation and store the initial assistant message."""
+    async def create_conversation(self, initial_messages: list[dict]):
+        """Create a new conversation and store the initial assistanst message."""
         conn = await self.get_db_connection()
         # Insert a new conversation
         conv_id = await conn.fetchval("INSERT INTO conversations DEFAULT VALUES RETURNING id")
         # Save the assistant's initial message
-        await conn.execute(
-            "INSERT INTO messages (conversation_id, role, content, created_at) VALUES ($1, $2, $3, $4)",
-            conv_id, "assistant", initial_message, datetime.utcnow()
-        )
+        # Insert each message in the list
+        for message in initial_messages:
+            await conn.execute(
+                "INSERT INTO messages (conversation_id, role, content, created_at) VALUES ($1, $2, $3, $4)",
+                conv_id,
+                message["role"],
+                message["content"],
+                datetime.datetime.utcnow()
+            )
         await conn.close()
         return conv_id
 
@@ -35,8 +40,6 @@ class MessageManager(DatabaseManager):
         )
         await conn.close()
         return [{"role": r["role"], "content": r["content"]} for r in rows]
-
-
 
 
 message_manager = MessageManager()

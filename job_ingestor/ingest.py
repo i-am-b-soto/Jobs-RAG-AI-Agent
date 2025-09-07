@@ -24,7 +24,7 @@ def chunk_text(text, chunk_size=CHUNK_SIZE):
 
 async def fetch_jobs():
     """Fetch jobs from RemoteOK API."""
-    async with httpx.AsyncClient() as client_http:
+    async with httpx.AsyncClient(timeout=120.0) as client_http:
         resp = await client_http.get(REMOTEOK_API)
         resp.raise_for_status()
         data = resp.json()
@@ -105,6 +105,7 @@ async def insert_jobs(jobs):
 
 
 async def main():
+    print("Fetching data from the API...")
     jobs = await fetch_jobs()
     print(f"✅ Successfully fetched jobs from the API: {len(jobs)}")
     docs, chunks = await insert_jobs(jobs)

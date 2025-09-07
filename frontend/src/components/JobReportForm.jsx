@@ -8,6 +8,7 @@ export default function JobReportForm() {
   const [jobTitle, setJobTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
+  const [convID, setConvID] = useState(null)
   const [error, setError] = useState(null);
 
   async function handleSubmit(e) {
@@ -30,6 +31,7 @@ export default function JobReportForm() {
 
       const data = await res.json();
       setReport(data.report); // backend: { report: "..." }
+      setConvID(data.conv_id);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -54,21 +56,23 @@ export default function JobReportForm() {
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
             required
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 rounded-xl font-semibold shadow-md hover:bg-indigo-700 transition disabled:opacity-50"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="spinner" /> Generating...
-              </>
-            ) : (
-              <>
-                <FileText className="h-5 w-5" /> Generate Report
-              </>
-            )}
-          </button>
+          {!report && (
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 rounded-xl font-semibold shadow-md hover:bg-indigo-700 transition disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="spinner" /> Generating...
+                </>
+              ) : (
+                <>
+                  <FileText className="h-5 w-5" /> Generate Report
+                </>
+              )}
+            </button>
+          )}
         </form>
 
         {error && (
@@ -82,7 +86,7 @@ export default function JobReportForm() {
         )}
 
         {report && (
-          <ReportPanel report={report} onNewReport={()=> setReport(null)}></ReportPanel>
+          <ReportPanel report={report} onNewReport={()=> setReport(null)} convID={convID}></ReportPanel>
         )}
       </div>
     </div>

@@ -20,6 +20,11 @@ CREATE TABLE IF NOT EXISTS documents (
   metadata JSONB               -- tags, location, salary, apply_url, etc.
 );
 
+
+--CREATE INDEX IF NOT EXISTS documents_title_embedding_ivfflat
+--ON documents USING ivfflat (title_embedding vector_cosine_ops) WITH (lists = 100);
+
+
 CREATE TABLE IF NOT EXISTS chunks (
   id BIGSERIAL PRIMARY KEY,
   document_id BIGINT REFERENCES documents(id) ON DELETE CASCADE,
@@ -61,6 +66,7 @@ CREATE TABLE IF NOT EXISTS messages (
   content TEXT,
   embedding VECTOR(3072),      -- embed messages for semantic recall
   metadata JSONB,
+  role TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

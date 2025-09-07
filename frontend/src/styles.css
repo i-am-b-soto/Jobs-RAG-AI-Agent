@@ -55,7 +55,20 @@ body {
     max-width: 400px;
   }
 
-  .report-content {
+  .user-message {
+    background: #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;          /* allows horizontal scroll if really long text */
+    margin-bottom: 1rem;
+    word-wrap: break-word;     /* break long words to fit container */
+    overflow-wrap: break-word; /* fallback for some browsers */
+    white-space: pre-wrap;     /* preserves line breaks but wraps text */
+    border-radius: 8px;
+  }
+
+
+  .system-message {
     background: #f9fafb;
     padding: 1rem;
     border-radius: 8px;
@@ -128,7 +141,7 @@ body {
     
     .ask-button {
       width: 20%;
-      height: 49%;
+      height: 41px;
       background: #51b147;
     }
   }
@@ -144,6 +157,16 @@ body {
   
   .spinner {
     display: inline-block;
-    color: #3b82f6; /* same as Tailwind text-blue-500 */
+    color: #c7d2fe; /* same as Tailwind text-blue-500 */
     animation: spin 1s linear infinite;
+  }
+
+  .spinner-small {
+    display: inline-block;
+    color:#f9fafb; /* same as Tailwind text-blue-500 */
+    animation: spin 1s linear infinite;
+  }
+
+  .message-square {
+    height: 50%;
   }

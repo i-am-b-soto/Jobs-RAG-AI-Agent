@@ -31,10 +31,9 @@ class DocumentManager(DatabaseManager):
         """
             Get all jobs based on job_title
         """
+        print(f"Obtained job title: {job_title}")
         query_embedding = openai_client.create_embeddings(job_title)
-        #query_vector_str = "[" + ",".join(f"{x:.6f}" for x in query_embedding) + "]"
-
-        #query_vector_str = "[" + ",".join(str(x) for x in query_embedding) + "]"
+        print(f"embedding: {query_embedding}")
 
         pool = await self.get_pool()
         async with pool.acquire() as conn:

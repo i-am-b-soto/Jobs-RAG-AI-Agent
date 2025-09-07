@@ -1,11 +1,7 @@
 # Jobs-RAG-AI-Agent
 A Custom Python-built RAG AI Agent for jobs
 
-<<<<<<< HEAD
 ### To start:
-=======
-###To start:
->>>>>>> 00a3a33 (Updating readme)
 You will need docker v2 
 
 -   docker compose up
